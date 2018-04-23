@@ -8,7 +8,7 @@ Created on Sun Apr  8 18:26:46 2018
 
 import ircer
 
-ircerbot = ircer.IRCer("skogssongar", "chat.freenode.net", 6667, "##itsanexperiment")
+ircerbot = ircer.IRCer("skogssongar", "irc.twitch.tv", 6667, "#imaqtpie", "oauth:XXXXXXXXXXXXXXXXXXXX")
               
 ircerbot.start()
     

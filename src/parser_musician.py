@@ -15,6 +15,7 @@ import random
 
 class ParserMusician():
     def __init__(self):
+        FoxDot.Clock.bpm = 92
         self.key = ([0, "minor"], [-5, "minor"], [5, "minor"], [-2, "major"], 
                     [3, "major"], [-4, "major"], [1, "minor"])
         FoxDot.Root.default.set(self.key[0][0])
@@ -25,7 +26,7 @@ class ParserMusician():
                        4: [0.25, 0.25, FoxDot.rest(0.5), 0.25, FoxDot.rest(0.25), 0.25, 0.25, 0.5, 0.25],
                        6: [0.25, 0.25, FoxDot.rest(0.5), 0.25, FoxDot.rest(0.25), 0.25, 0.5, 0.75],
                        8: [1, 1, 0.25, 0.25, FoxDot.rest(0.25), 0.25, 0.25, 0.25]}
-        self.letter_to_rhythm_dictionary = {"B": "$", "C": "E", "D": "%", "F": "F",
+        self.letter_to_rhythm_dictionary = {"B": "$", "C": "E", "D": "%", "F": "G",
                                   "G": "A", "J": "L", "K": "#", "P": "P",
                                   "Q": "r", "S": "=", "T": "n", "V": "V",
                                   "X": "H", "Z": "W", "H": ".",
@@ -40,7 +41,7 @@ class ParserMusician():
                                  # miscellaneous
         self.pos_to_chord_dictionary = {"``": 0, "''": 0, "$": 0, "(": 0, ")": 0,
                                  ",": 0, "--": 0, ".": 0, ":": 0, "CD": 1,
-                                 "SYM": 2, "LS": 2,
+                                 "SYM": 2, "LS": 2, "#": 2,
                                  # nouns
                                  "NN": 3, "NNP": 4, "NNPS": 5, "NNS": 6,
                                  # genitive marker and pronouns
@@ -62,7 +63,7 @@ class ParserMusician():
                                  "FW": 34, "UH": 35}
         self.pos_to_chord_bass_dictionary = {"``": 0, "''": 0, "$": 0, "(": 0, ")": 0,
                                  ",": 0, "--": 0, ".": 0, ":": 0, "CD": 0,
-                                 "SYM": 0, "LS": 0,
+                                 "SYM": 0, "LS": 0, "#": 0,
                                  # nouns
                                  "NN": -4, "NNP": 4, "NNPS": 5, "NNS": 5,
                                  # genitive marker and pronouns
@@ -72,7 +73,7 @@ class ParserMusician():
                                  "JJ": 0, "JJR": 1, "JJS": -1, "WDT": 2, "DT": 3,
                                  "PDT": 3,
                                  # adverbs
-                                 "RB": -2, "RBR": -2, "RBS": 0, "WRB": -5,
+                                 "RB": -2, "RBR": -2, "RBS": 0, "WRB": 5,
                                  # verbs
                                  "VB": -3, "VBD": 3, "VBG": -3, "VBN": -3,
                                  "VBP": -3, "VBZ": 3,
@@ -149,6 +150,12 @@ class ParserMusician():
         if int(average) % 2 == 1:
             meter = 3
         tags = nltk.pos_tag(text)
+        # for printing pos
+        blah = ""
+        for tag in tags:
+            blah += tag[1] + " "
+        print(blah)
+        # done printing pos
         chords = []
         for pos in tags:
             chords.append(self.chord_to_voicing_dictionary[self.pos_to_chord_dictionary[pos[1]]])
@@ -213,7 +220,6 @@ class ParserMusician():
         dictionary = {}
         dictionary["pos"] = self.__parse_pos_create_chords_and_bass(text)
         dictionary["consonants"] = self.__parse_consonants_create_rhythms(text)
-        print("Starting sentence: " + text)
         print(dictionary["consonants"])
         print(dictionary["pos"])
         print("\n")
